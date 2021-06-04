@@ -3,23 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace SmartSchool.API.Models
+namespace SmartSchool.API.DTOs
 {
-    public class Teacher
+    public class TeacherRegistrationDTO
     {
-        public Teacher()
-        {
-
-        }
-
-        public Teacher(int teacherId, string name, string surname,int teacherEnrollment)
-        {
-            this.TeacherId = teacherId;
-            this.Name = name;
-            this.Surname = surname;
-            this.TeacherEnrollment = teacherEnrollment;
-        }
-
         public int TeacherId { get; set; }
         public int TeacherEnrollment { get; set; }
         public string Name { get; set; }
@@ -28,6 +15,5 @@ namespace SmartSchool.API.Models
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime? EndDate { get; set; } = null;
         public bool Active { get; set; } = true;
-        public IEnumerable<Discipline> DisciplineClasses { get; set; }
     }
 }

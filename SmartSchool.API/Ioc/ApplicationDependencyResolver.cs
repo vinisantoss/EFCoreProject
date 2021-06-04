@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SmartSchool.API.AutoMapper;
 using SmartSchool.API.Data.Repository;
 using SmartSchool.API.Data.Repository.Interfaces;
 using System;
@@ -30,7 +32,14 @@ namespace SmartSchool.API.Ioc
         public static void DependencyResolver(IServiceCollection services)
         {
             services.AddSingleton(Configuration);
+            services.AddSingleton(CreateAutoMapperConfiguration());
             services.AddScoped<IRepository, Repository>();
         }
+
+        private static IMapper CreateAutoMapperConfiguration() =>
+            new MapperConfiguration(configuration =>
+            {
+                configuration.AddProfile(new MappingProfile()); 
+            }).CreateMapper();
     }
 }

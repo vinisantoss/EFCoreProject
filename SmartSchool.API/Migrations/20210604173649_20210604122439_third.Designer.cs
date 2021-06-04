@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartSchool.API.Data.Context;
 
 namespace SmartSchool.API.Migrations
 {
     [DbContext(typeof(SmartSchoolContextSqlite))]
-    partial class SmartSchoolContextSqliteModelSnapshot : ModelSnapshot
+    [Migration("20210604173649_20210604122439_third")]
+    partial class _20210604122439_third
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

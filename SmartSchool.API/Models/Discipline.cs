@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace SmartSchool.API.Models
 {
@@ -13,13 +10,12 @@ namespace SmartSchool.API.Models
 
         }
 
-        public Discipline(int id, string name, int teacherId, int courseId, int courseHours)
+        public Discipline(int id, string name, int teacherId, int courseId)
         {
             this.Id = id;
             this.Name = name;
             this.TeacherId = teacherId;
             this.CourseId = courseId;
-            this.CourseHours = courseHours;
         }
 
         public int Id { get; set; }
@@ -29,7 +25,7 @@ namespace SmartSchool.API.Models
         public int CourseId { get; set; }
         public Course Course { get; set; }
         public int? RequiredId { get; set; } = null;
-        public Discipline RequeridDiscipline { get; set; }
+        public Discipline RequiredDiscipline { get; set; }
         public int CourseHours { get; set; }
         public IEnumerable<StudentDiscipline> StudentsDisciplines { get; set; }
 

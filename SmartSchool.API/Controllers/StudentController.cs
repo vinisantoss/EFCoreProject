@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SmartSchool.API.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using SmartSchool.API.Data.Context;
-using Microsoft.EntityFrameworkCore;
 using SmartSchool.API.Data.Repository.Interfaces;
+using SmartSchool.API.DTOs;
+using SmartSchool.API.Models;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace SmartSchool.API.Controllers
 {
@@ -16,11 +16,15 @@ namespace SmartSchool.API.Controllers
     {
         private readonly SmartSchoolContextSqlite _smartSchoolContext;
         private readonly IRepository _repository;
+        private readonly IMapper _mapper;
+
         public StudentController(SmartSchoolContextSqlite smartSchoolContext,
-            IRepository repository)
+            IRepository repository,
+            IMapper mapper)
         {
             _smartSchoolContext = smartSchoolContext;
             _repository = repository;
+            _mapper = mapper;
         }
 
          [HttpGet]
@@ -28,11 +32,11 @@ namespace SmartSchool.API.Controllers
         {
             try
             {
-                return await Task.FromResult(Ok(_repository.GetAllStudents(true)));
+                return Ok(_mapper.Map<IEnumerable<StudentDTO>>(await _repository.GetAllStudents(true)));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return await Task.FromResult(BadRequest("Aluno não encontrado!"));
+                return  BadRequest("Aluno não encontrado!");
             }
         }
 
@@ -43,65 +47,67 @@ namespace SmartSchool.API.Controllers
         {
             try
             {
-                return await Task.FromResult(Ok(_repository.GetStudentById(id, false)));
-            }
-            catch (Exception ex)
-            {
-                return await Task.FromResult(BadRequest("Aluno não encontrado!"));
-            }
-        }
-
-
-        //insert
-        [HttpPost]
-        public async Task<IActionResult> PostAsync(Student student)
-        {
-            try
-            {
-                await _repository.Add(student);
-                return await Task.FromResult(Ok(await _repository.SaveChanges()));
+                return  Ok(_mapper.Map<StudentDTO>(await _repository.GetStudentById(id, false)));
             }
             catch (Exception)
             {
-                return await Task.FromResult(BadRequest("Aluno não encontrado!"));
+                return BadRequest("Aluno não encontrado!");
+            }
+        }
+
+        //insert
+        [HttpPost]
+        public async Task<IActionResult> PostAsync(StudentRegistrationDTO model)
+        {
+            try
+            {
+                var student = _mapper.Map<Student>(model);
+                await _repository.Add(student);
+                await _repository.SaveChanges();
+                return Created($"/api/Student/{model.Id}", _mapper.Map<StudentDTO>(student));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Erro: {ex.Message} ao inserir aluno!");
             }
         }
 
         //update
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutAsync(int id, Student student)
+        public async Task<IActionResult> PutAsync(int id, StudentRegistrationDTO model)
         {
             try
             {
-                var studentUpdate = _repository.GetStudentById(id);
+                var studentUpdate = await _repository.GetStudentById(id);
+                if(studentUpdate == null) return BadRequest("Aluno não encontrado!");
 
-                if(studentUpdate == null) return await Task.FromResult(BadRequest("Aluno não encontrado!"));
-
-                await _repository.Update(student);
-                return await Task.FromResult(Ok(await _repository.SaveChanges()));
+                await _repository.Update(_mapper.Map<Student>(model));
+                await _repository.SaveChanges();
+                return Ok("Aluno Atualizado");
             }
             catch (Exception)
             {
-                return await Task.FromResult(BadRequest("Aluno não encontrado!"));
+                return BadRequest("Aluno não encontrado!");
             }
         }
 
         //"half" update 
         [HttpPatch("{id}")]
-        public async Task<IActionResult> PatchAsync(int id, Student student)
+        public async Task<IActionResult> PatchAsync(int id, StudentRegistrationDTO model)
         {
             try
             {
-                var studentUpdate = _repository.GetStudentById(id);
+                var studentUpdate = await _repository.GetStudentById(id);
 
-                if (studentUpdate == null) return await Task.FromResult(BadRequest("Aluno não encontrado!"));
+                if (studentUpdate == null) return BadRequest("Aluno não encontrado!");
 
-                await _repository.Update(student);
-                return await Task.FromResult(Ok(await _repository.SaveChanges()));
+                await _repository.Update(_mapper.Map<Student>(model));
+                await _repository.SaveChanges();
+                return Ok("Aluno Atualizado!");
             }
             catch (Exception)
             {
-                return await Task.FromResult(BadRequest("Aluno não encontrado!"));
+                return BadRequest("Aluno não encontrado!");
             }
         }
 
@@ -110,15 +116,16 @@ namespace SmartSchool.API.Controllers
         {
             try
             {
-                var student = _repository.GetStudentById(id);
-                if (student == null) return await Task.FromResult(BadRequest("Aluno não encontrado!"));
+                var student = await _repository.GetStudentById(id);
+                if (student == null) return BadRequest("Aluno não encontrado!");
 
                 await _repository.Delete(student);
-                return await Task.FromResult(Ok(await _repository.SaveChanges()));
+                await _repository.SaveChanges();
+                return Ok("Aluno Deletado");
             }
             catch (Exception)
             {
-                return await Task.FromResult(BadRequest("Aluno não encontrado!"));
+                return BadRequest("Aluno não encontrado!");
             }
         }
     }
