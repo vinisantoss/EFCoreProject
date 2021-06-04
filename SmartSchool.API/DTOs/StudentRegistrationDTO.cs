@@ -2,9 +2,18 @@
 
 namespace SmartSchool.API.DTOs
 {
+    /// <summary>
+    /// Objeto DTO de Aluno para inserção
+    /// </summary>
     public class StudentRegistrationDTO
     {
+        /// <summary>
+        /// Identificador e chave do banco
+        /// </summary>
         public int Id { get; set; }
+        /// <summary>
+        /// Chave do aluno para uso dentro da instituição
+        /// </summary>
         public int StudentEnrollment { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }

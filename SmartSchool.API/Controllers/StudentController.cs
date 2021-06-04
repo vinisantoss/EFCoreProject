@@ -10,13 +10,25 @@ using System.Threading.Tasks;
 
 namespace SmartSchool.API.Controllers
 {
-    [Route("api/[controller]")]
+    /// <summary>
+    /// Controller de Estudante
+    /// </summary>
+
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     public class StudentController : ControllerBase
     {
         private readonly SmartSchoolContextSqlite _smartSchoolContext;
         private readonly IRepository _repository;
         private readonly IMapper _mapper;
+
+        /// <summary>
+        /// Construtor de controller com injeções de dependência
+        /// </summary>
+        /// <param name="smartSchoolContext"></param>
+        /// <param name="repository"></param>
+        /// <param name="mapper"></param>
 
         public StudentController(SmartSchoolContextSqlite smartSchoolContext,
             IRepository repository,
@@ -27,6 +39,10 @@ namespace SmartSchool.API.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Método responsável para retornar todos os alunos cadastrados
+        /// </summary>
+        /// <returns></returns>
          [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -40,7 +56,11 @@ namespace SmartSchool.API.Controllers
             }
         }
 
-        //api/student/1
+        /// <summary>
+        /// Método responsável por retornar apenas um aluno pelo seu código id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
@@ -55,7 +75,11 @@ namespace SmartSchool.API.Controllers
             }
         }
 
-        //insert
+        /// <summary>
+        /// Método responsável por inserir novos alunos
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> PostAsync(StudentRegistrationDTO model)
         {
@@ -72,7 +96,12 @@ namespace SmartSchool.API.Controllers
             }
         }
 
-        //update
+        /// <summary>
+        /// Método responsável por atualizar as informações de aluno
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutAsync(int id, StudentRegistrationDTO model)
         {
@@ -91,7 +120,12 @@ namespace SmartSchool.API.Controllers
             }
         }
 
-        //"half" update 
+        /// <summary>
+        /// Método responsável por atualizar parte das informações do aluno
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPatch("{id}")]
         public async Task<IActionResult> PatchAsync(int id, StudentRegistrationDTO model)
         {
@@ -111,6 +145,11 @@ namespace SmartSchool.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Método responsável por deletar o aluno
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {

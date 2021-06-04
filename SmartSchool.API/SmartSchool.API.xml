@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>SmartSchool.API</name>
+    </assembly>
+    <members>
+        <member name="T:SmartSchool.API.Controllers.StudentController">
+            <summary>
+            Controller de Estudante
+            </summary>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.StudentController.#ctor(SmartSchool.API.Data.Context.SmartSchoolContextSqlite,SmartSchool.API.Data.Repository.Interfaces.IRepository,AutoMapper.IMapper)">
+            <summary>
+            Construtor de controller com injeções de dependência
+            </summary>
+            <param name="smartSchoolContext"></param>
+            <param name="repository"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.StudentController.Get">
+            <summary>
+            Método responsável para retornar todos os alunos cadastrados
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.StudentController.GetById(System.Int32)">
+            <summary>
+            Método responsável por retornar apenas um aluno pelo seu código id
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.StudentController.PostAsync(SmartSchool.API.DTOs.StudentRegistrationDTO)">
+            <summary>
+            Método responsável por inserir novos alunos
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.StudentController.PutAsync(System.Int32,SmartSchool.API.DTOs.StudentRegistrationDTO)">
+            <summary>
+            Método responsável por atualizar as informações de aluno
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.StudentController.PatchAsync(System.Int32,SmartSchool.API.DTOs.StudentRegistrationDTO)">
+            <summary>
+            Método responsável por atualizar parte das informações do aluno
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.StudentController.DeleteAsync(System.Int32)">
+            <summary>
+            Método responsável por deletar o aluno
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SmartSchool.API.Controllers.TeacherController">
+            <summary>
+            Controller de professores
+            </summary>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.TeacherController.#ctor(SmartSchool.API.Data.Repository.Interfaces.IRepository,AutoMapper.IMapper)">
+            <summary>
+            Controller com injeção de dependência
+            </summary>
+            <param name="repository"></param>
+            <param name="mapper"></param>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.TeacherController.Get">
+            <summary>
+            Método responsável por retornar todos os professores cadastrados
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.TeacherController.GetById(System.Int32)">
+            <summary>
+            Método responsável
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.TeacherController.PostAsync(SmartSchool.API.DTOs.TeacherRegistrationDTO)">
+            <summary>
+            Método responsável por inserir um novo professor
+            </summary>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.TeacherController.PutAsync(System.Int32,SmartSchool.API.DTOs.TeacherRegistrationDTO)">
+            <summary>
+            Método responsável por atualizar as informações do professor
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.TeacherController.PatchAsync(System.Int32,SmartSchool.API.DTOs.TeacherRegistrationDTO)">
+            <summary>
+            Método responsável por atualizar parte das informações de professor
+            </summary>
+            <param name="id"></param>
+            <param name="model"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartSchool.API.Controllers.TeacherController.DeleteAsync(System.Int32)">
+            <summary>
+            Método responsável por deletar um professor
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="T:SmartSchool.API.DTOs.StudentRegistrationDTO">
+            <summary>
+            Objeto DTO de Aluno para inserção
+            </summary>
+        </member>
+        <member name="P:SmartSchool.API.DTOs.StudentRegistrationDTO.Id">
+            <summary>
+            Identificador e chave do banco
+            </summary>
+        </member>
+        <member name="P:SmartSchool.API.DTOs.StudentRegistrationDTO.StudentEnrollment">
+            <summary>
+            Chave do aluno para uso dentro da instituição
+            </summary>
+        </member>
+        <member name="T:SmartSchool.API.DTOs.TeacherRegistrationDTO">
+            <summary>
+            Objeto DTO de Professor para inserção
+            </summary>
+        </member>
+        <member name="P:SmartSchool.API.DTOs.TeacherRegistrationDTO.TeacherId">
+            <summary>
+            Identificador e chave do banco
+            </summary>
+        </member>
+        <member name="P:SmartSchool.API.DTOs.TeacherRegistrationDTO.TeacherEnrollment">
+            <summary>
+            Chave do professor, para uso dentro da instituição
+            </summary>
+        </member>
+        <member name="M:SmartSchool.API.Ioc.ApplicationDependencyResolver.DependencyResolver(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+             Singleton: Instancia a primeira vez e reutiliza em todos os lugares
+             Transient: Instancia o serviço quando solicitado e a cada nova requisição ele cria novas instancias. ex: 5 dependencias = 5 instancias
+             Scope: Instancia o serviço quando solicitado e compartilha a mesma a cada nova requisicao. Quando um outro contexto precisa é criada uma nova instancia e compartilhada dentro do contexto.
+            </summary>
+            <param name="services"></param>
+        </member>
+    </members>
+</doc>

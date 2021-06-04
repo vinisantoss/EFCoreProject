@@ -21,12 +21,10 @@ namespace SmartSchool.API.Ioc
                 .AddJsonFile(fileSettings, false)
                 .Build();
         }
-
         /// <summary>
-        /// Resolve as dependencias. Podem ser singleton, scope, ou transient.
-        //  SINGLETON: instancia o serviço quando é solicitado pela primeira vez e reutiliza a instancia em todos os lugares
-        //  TRANSIENT: instancia o serviço quando é solicitado e a cada requisição nova ou ate na mesma requisição ele cria uma novas instancias ex: 5 dependencias serão 5 instancias novas
-        //  SCOPED: instancia o serviço quando é solicitado e a cada requisição ele utiliza a mesma instancia para as demais. A dependencia é compartilhada para instancias do mesmo contexto. em um segundo contexto outro objeto sera criado e compartilhado dentro do contexto.
+        ///  Singleton: Instancia a primeira vez e reutiliza em todos os lugares
+        ///  Transient: Instancia o serviço quando solicitado e a cada nova requisição ele cria novas instancias. ex: 5 dependencias = 5 instancias
+        ///  Scope: Instancia o serviço quando solicitado e compartilha a mesma a cada nova requisicao. Quando um outro contexto precisa é criada uma nova instancia e compartilhada dentro do contexto.
         /// </summary>
         /// <param name="services"></param>
         public static void DependencyResolver(IServiceCollection services)
