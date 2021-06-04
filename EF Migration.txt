@@ -1,0 +1,38 @@
+*FORA DO VS* cli
+
+-> abrir qualquer console e executar o comando:
+
+dotnet tool install --global dotnet-ef
+
+-> feito isso ja pode utilizar o dotnet ef
+
+
+. dotnet ef -h ( mostra as opções de criacao)
+. dotnet ef migrations -h (mostra as opcoes de migrations)
+. dotnet ef database -h (msotra as opcoes de database) 
+. dotnet ef script migration ( gera o script para rodar ) pode rodar no pipeline
+
+
+*DENTRO DO VS* tools do ef
+
+
+. Add-Migration initial ( cria as migrations iniciais)
+. Update-Database ( atualiza o banco de dados )
+. Script-Migration (gera script de criação)
+. Add-Migration ( cria as demais migrations ) e depois .Update-Database ( para atualizar o banco com as novas tabelas )
+. Scaffold-DbContext ( possibilita criar um projeto baseado em um banco de dados legado )
+
+Como? 
+
+Entrar no projeto que vai receber os dados do legado e executar o comando:
+
+scaffold-dbcontext -provider microsoft.entityframeworkcore.sqlserver -connection "Integrated Security=SSPI;Persist Security Info=False;User ID=ABHNTBL6800353;Initial Catalog=SmartSchool;Data Source=localhost"
+
+Mas para isso funcionar você precisa usar o design lindu, mas como? executa ai:
+
+install-package microsoft.entityframeworkcore.design
+
+Ah, não esqueça de instalar o tools do EF Core e é claro a referencia do sql server (:... como? vamos lá:
+
+install-package microsoft.entityframeworkcore.tools
+install-package microsoft.entityframeworkcore.sqlserver <- OBS: instalar a dependencia do banco legado ( my sql, oracle... etc)
