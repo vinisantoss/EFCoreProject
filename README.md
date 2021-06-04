@@ -1,0 +1,2 @@
+# EFCoreProject
+EFCore + Docker + Angular
