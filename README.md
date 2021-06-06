@@ -1,2 +1,2 @@
 # EFCoreProject
-EFCore + Docker + Angular
+EFCore + Angular10 + sqlserver or sqllite
