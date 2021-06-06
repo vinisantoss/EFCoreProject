@@ -40,11 +40,11 @@ namespace SmartSchool.API.Controllers
         /// <returns></returns>
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync()
         {
             try
             {
-                return Ok(_mapper.Map<IEnumerable<Teacher>>(await _repository.GetAllTeachers(true)));
+                return Ok(_mapper.Map<IEnumerable<Teacher>>(await _repository.GetAllTeachersAsync(true)));
             }
             catch (Exception)
             {
@@ -59,11 +59,11 @@ namespace SmartSchool.API.Controllers
         /// <returns></returns>
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             try
             {
-                return Ok(_mapper.Map<TeacherDTO>(await _repository.GetTeacherById(id, false)));
+                return Ok(_mapper.Map<TeacherDTO>(await _repository.GetTeacherByIdAsync(id, false)));
             }
             catch (Exception)
             {
@@ -82,8 +82,8 @@ namespace SmartSchool.API.Controllers
             try
             {
                 var teacher = _mapper.Map<Teacher>(model);
-                await _repository.Add(teacher);
-                await _repository.SaveChanges();
+                await _repository.AddAsync(teacher);
+                await _repository.SaveChangesAsync();
                 return Created($"/api/Teacher/{model.TeacherId}", _mapper.Map<TeacherDTO>(teacher));
             }
             catch (Exception ex)
@@ -103,12 +103,12 @@ namespace SmartSchool.API.Controllers
         {
             try
             {
-                var teacherUpdate = await _repository.GetTeacherById(id);
+                var teacherUpdate = await _repository.GetTeacherByIdAsync(id);
 
                 if (teacherUpdate == null) return BadRequest("Professor não encontrado!");
 
-                await _repository.Update(_mapper.Map<Teacher>(model));
-                await _repository.SaveChanges();
+                await _repository.UpdateAsync(_mapper.Map<Teacher>(model));
+                await _repository.SaveChangesAsync();
                 return Ok("Professor Atualizado!");
             }
             catch (Exception)
@@ -128,12 +128,12 @@ namespace SmartSchool.API.Controllers
         {
             try
             {
-                var teacherUpdate = await _repository.GetTeacherById(id);
+                var teacherUpdate = await _repository.GetTeacherByIdAsync(id);
 
                 if (teacherUpdate == null) return BadRequest("Professor não encontrado!");
 
-                await _repository.Update(_mapper.Map<Teacher>(model));
-                await _repository.SaveChanges();
+                await _repository.UpdateAsync(_mapper.Map<Teacher>(model));
+                await _repository.SaveChangesAsync();
                 return Ok("Professor Atualizado!");
             }
             catch (Exception)
@@ -152,11 +152,11 @@ namespace SmartSchool.API.Controllers
         {
             try
             {
-                var teacher = await _repository.GetTeacherById(id);
+                var teacher = await _repository.GetTeacherByIdAsync(id);
                 if (teacher == null) return BadRequest("Professor não encontrado!");
 
-                await _repository.Delete(teacher);
-                await _repository.SaveChanges();
+                await _repository.DeleteAsync(teacher);
+                await _repository.SaveChangesAsync();
                 return Ok("Professor deletado!");
             }
             catch (Exception)

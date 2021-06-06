@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmartSchool.API.Data.Context;
 using SmartSchool.API.Data.Repository.Interfaces;
+using SmartSchool.API.Helpers;
 using SmartSchool.API.Models;
 using System;
 using System.Collections.Generic;
@@ -11,24 +12,22 @@ namespace SmartSchool.API.Data.Repository
 {
     public class Repository : IRepository
     {
-        private readonly SmartSchoolContextSqlite _smartSchoolContext;
+        private readonly SmartSchoolContextSqlServer _smartSchoolContext;
 
-        public Repository(SmartSchoolContextSqlite smartSchoolContext)
+        public Repository(SmartSchoolContextSqlServer smartSchoolContext)
         {
             _smartSchoolContext = smartSchoolContext;
         }
 
-        public async Task Add<T>(T entity) where T : class
-        {
-           await  Task.FromResult(_smartSchoolContext.Add(entity));
-        }
+        public async Task AddAsync<T>(T entity) where T : class
+            => await  _smartSchoolContext.AddAsync(entity);
 
-        public async Task Delete<T>(T entity) where T : class
-        {
-            await Task.FromResult(_smartSchoolContext.Remove(entity));
-        }
+        public async Task DeleteAsync<T>(T entity) where T : class
+            => await Task.FromResult(_smartSchoolContext.Remove(entity));
 
-        public async Task<List<Student>> GetAllStudents(bool includeTeacher = false)
+        public async Task<PageList<Student>> GetAllStudentsAsync(
+            PageParameters pageParameters,
+            bool includeTeacher = false)
         {
             IQueryable<Student> query = _smartSchoolContext.Students;
 
@@ -40,10 +39,21 @@ namespace SmartSchool.API.Data.Repository
 
             query = query.AsNoTracking().OrderBy(student => student.Id);
 
-            return await query.ToListAsync();
+            if (!string.IsNullOrEmpty(pageParameters.Name))
+                query = query.Where(student => student.Name
+                                                      .ToUpper().Contains(pageParameters.Name.ToUpper()) ||
+                                                      student.Surname
+                                                      .ToUpper().Contains(pageParameters.Name.ToUpper()));
+            if (pageParameters.StudentEnrollment > 0)
+                query = query.Where(student => student.StudentEnrollment == pageParameters.StudentEnrollment);
+
+            if(!pageParameters.Active.Equals(null))
+                query = query.Where(student => student.Active == !pageParameters.Active.Equals(0));
+
+            return await PageList<Student>.CreateAsync(query, pageParameters.PageNumber, pageParameters.PageSize);
         }
 
-        public async Task<List<Student>> GetAllStudentsByDisciplineId(int disciplineId, bool includeTeacher = false)
+        public async Task<IEnumerable<Student>> GetAllStudentsByDisciplineIdAsync(int disciplineId, bool includeTeacher = false)
         {
             IQueryable<Student> query = _smartSchoolContext.Students;
 
@@ -60,7 +70,7 @@ namespace SmartSchool.API.Data.Repository
             return await query.ToListAsync();
         }
 
-        public async Task<List<Teacher>> GetAllTeachers(bool includeStudents = false)
+        public async Task<IEnumerable<Teacher>> GetAllTeachersAsync(bool includeStudents = false)
         {
             IQueryable<Teacher> query = _smartSchoolContext.Teachers;
 
@@ -75,7 +85,7 @@ namespace SmartSchool.API.Data.Repository
             return await query.ToListAsync();
         }
 
-        public async Task<List<Teacher>> GetAllTeachersByDisciplineId(int disciplineId, bool includeStudents = false)
+        public async Task<IEnumerable<Teacher>> GetAllTeachersByDisciplineIdAsync(int disciplineId, bool includeStudents = false)
         {
             IQueryable<Teacher> query = _smartSchoolContext.Teachers;
 
@@ -92,7 +102,7 @@ namespace SmartSchool.API.Data.Repository
             return await query.ToListAsync();
         }
 
-        public async Task<Student> GetStudentById(int studentId, bool includeTeacher = false)
+        public async Task<Student> GetStudentByIdAsync(int studentId, bool includeTeacher = false)
         {
             IQueryable<Student> query = _smartSchoolContext.Students;
 
@@ -109,7 +119,7 @@ namespace SmartSchool.API.Data.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<Teacher> GetTeacherById(int teacherId,bool includeStudents = false)
+        public async Task<Teacher> GetTeacherByIdAsync(int teacherId,bool includeStudents = false)
         {
             IQueryable<Teacher> query = _smartSchoolContext.Teachers;
 
@@ -126,12 +136,10 @@ namespace SmartSchool.API.Data.Repository
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<bool> SaveChanges()
-        {
-            return await Task.FromResult(_smartSchoolContext.SaveChanges() > 0);
-        }
+        public async Task<bool> SaveChangesAsync()
+            => await _smartSchoolContext.SaveChangesAsync() > 0;
 
-        public async Task Update<T>(T entity) where T : class
+        public async Task UpdateAsync<T>(T entity) where T : class
         {
             await Task.FromResult(_smartSchoolContext.Update(entity));
         }

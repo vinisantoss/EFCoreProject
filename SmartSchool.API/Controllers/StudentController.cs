@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartSchool.API.Data.Context;
 using SmartSchool.API.Data.Repository.Interfaces;
 using SmartSchool.API.DTOs;
+using SmartSchool.API.Helpers;
 using SmartSchool.API.Models;
 using System;
 using System.Collections.Generic;
@@ -19,22 +20,19 @@ namespace SmartSchool.API.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     public class StudentController : ControllerBase
     {
-        private readonly SmartSchoolContextSqlite _smartSchoolContext;
         private readonly IRepository _repository;
         private readonly IMapper _mapper;
 
         /// <summary>
         /// Construtor de controller com injeções de dependência
         /// </summary>
-        /// <param name="smartSchoolContext"></param>
         /// <param name="repository"></param>
         /// <param name="mapper"></param>
 
-        public StudentController(SmartSchoolContextSqlite smartSchoolContext,
+        public StudentController(
             IRepository repository,
             IMapper mapper)
         {
-            _smartSchoolContext = smartSchoolContext;
             _repository = repository;
             _mapper = mapper;
         }
@@ -44,11 +42,14 @@ namespace SmartSchool.API.Controllers
         /// </summary>
         /// <returns></returns>
          [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAsync([FromQuery]PageParameters pageParameters)
         {
             try
             {
-                return Ok(_mapper.Map<IEnumerable<StudentDTO>>(await _repository.GetAllStudents(true)));
+                var students = await _repository.GetAllStudentsAsync(pageParameters, true);
+                Response.AddPagination(students.CurrentPage, students.PageSize, students.TotalCount, students.TotalPages);
+
+                return Ok(_mapper.Map<IEnumerable<StudentDTO>>(students));
             }
             catch (Exception)
             {
@@ -63,11 +64,11 @@ namespace SmartSchool.API.Controllers
         /// <returns></returns>
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
             try
             {
-                return  Ok(_mapper.Map<StudentDTO>(await _repository.GetStudentById(id, false)));
+                return  Ok(_mapper.Map<StudentDTO>(await _repository.GetStudentByIdAsync(id, false)));
             }
             catch (Exception)
             {
@@ -86,8 +87,8 @@ namespace SmartSchool.API.Controllers
             try
             {
                 var student = _mapper.Map<Student>(model);
-                await _repository.Add(student);
-                await _repository.SaveChanges();
+                await _repository.AddAsync(student);
+                await _repository.SaveChangesAsync();
                 return Created($"/api/Student/{model.Id}", _mapper.Map<StudentDTO>(student));
             }
             catch (Exception ex)
@@ -107,11 +108,11 @@ namespace SmartSchool.API.Controllers
         {
             try
             {
-                var studentUpdate = await _repository.GetStudentById(id);
+                var studentUpdate = await _repository.GetStudentByIdAsync(id);
                 if(studentUpdate == null) return BadRequest("Aluno não encontrado!");
 
-                await _repository.Update(_mapper.Map<Student>(model));
-                await _repository.SaveChanges();
+                await _repository.UpdateAsync(_mapper.Map<Student>(model));
+                await _repository.SaveChangesAsync();
                 return Ok("Aluno Atualizado");
             }
             catch (Exception)
@@ -131,12 +132,12 @@ namespace SmartSchool.API.Controllers
         {
             try
             {
-                var studentUpdate = await _repository.GetStudentById(id);
+                var studentUpdate = await _repository.GetStudentByIdAsync(id);
 
                 if (studentUpdate == null) return BadRequest("Aluno não encontrado!");
 
-                await _repository.Update(_mapper.Map<Student>(model));
-                await _repository.SaveChanges();
+                await _repository.UpdateAsync(_mapper.Map<Student>(model));
+                await _repository.SaveChangesAsync();
                 return Ok("Aluno Atualizado!");
             }
             catch (Exception)
@@ -155,11 +156,11 @@ namespace SmartSchool.API.Controllers
         {
             try
             {
-                var student = await _repository.GetStudentById(id);
+                var student = await _repository.GetStudentByIdAsync(id);
                 if (student == null) return BadRequest("Aluno não encontrado!");
 
-                await _repository.Delete(student);
-                await _repository.SaveChanges();
+                await _repository.DeleteAsync(student);
+                await _repository.SaveChangesAsync();
                 return Ok("Aluno Deletado");
             }
             catch (Exception)

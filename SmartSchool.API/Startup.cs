@@ -28,21 +28,15 @@ namespace SmartSchool.API
             ApplicationDependencyResolver.DependencyResolver(services);
             var configuration = ApplicationDependencyResolver.Configuration;
 
-            /*
-            var migrationAssembly = typeof(Startup)
-                .GetTypeInfo()
-                .Assembly
-                .GetName().Name;
+            services.AddDbContext<SmartSchoolContextSqlServer>(options => 
 
-            services.AddDbContext<Context>(
-                options => options.UseSqlServer(configuration["ConnectionStrings:SqlServer"], sql =>
-                sql.MigrationsAssembly(migrationAssembly))
-                );*/
+                options.UseSqlServer(configuration["ConnectionStrings:SqlServer"])
+            );
 
-            services.AddDbContext<SmartSchoolContextSqlite>
-                (
-                    context => context.UseSqlite(configuration["ConnectionStrings:Sqlite"])
-                );
+            //services.AddDbContext<SmartSchoolContextSqlite>
+            //    (
+            //        context => context.UseSqlite(configuration["ConnectionStrings:Sqlite"])
+            //    );
 
             services.AddVersionedApiExplorer(options =>
             {

@@ -9,21 +9,20 @@
             Controller de Estudante
             </summary>
         </member>
-        <member name="M:SmartSchool.API.Controllers.StudentController.#ctor(SmartSchool.API.Data.Context.SmartSchoolContextSqlite,SmartSchool.API.Data.Repository.Interfaces.IRepository,AutoMapper.IMapper)">
+        <member name="M:SmartSchool.API.Controllers.StudentController.#ctor(SmartSchool.API.Data.Repository.Interfaces.IRepository,AutoMapper.IMapper)">
             <summary>
             Construtor de controller com injeções de dependência
             </summary>
-            <param name="smartSchoolContext"></param>
             <param name="repository"></param>
             <param name="mapper"></param>
         </member>
-        <member name="M:SmartSchool.API.Controllers.StudentController.Get">
+        <member name="M:SmartSchool.API.Controllers.StudentController.GetAsync(SmartSchool.API.Helpers.PageParameters)">
             <summary>
             Método responsável para retornar todos os alunos cadastrados
             </summary>
             <returns></returns>
         </member>
-        <member name="M:SmartSchool.API.Controllers.StudentController.GetById(System.Int32)">
+        <member name="M:SmartSchool.API.Controllers.StudentController.GetByIdAsync(System.Int32)">
             <summary>
             Método responsável por retornar apenas um aluno pelo seu código id
             </summary>
@@ -72,13 +71,13 @@
             <param name="repository"></param>
             <param name="mapper"></param>
         </member>
-        <member name="M:SmartSchool.API.Controllers.TeacherController.Get">
+        <member name="M:SmartSchool.API.Controllers.TeacherController.GetAsync">
             <summary>
             Método responsável por retornar todos os professores cadastrados
             </summary>
             <returns></returns>
         </member>
-        <member name="M:SmartSchool.API.Controllers.TeacherController.GetById(System.Int32)">
+        <member name="M:SmartSchool.API.Controllers.TeacherController.GetByIdAsync(System.Int32)">
             <summary>
             Método responsável
             </summary>
